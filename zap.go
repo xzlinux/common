@@ -1,21 +1,24 @@
 package common
 
 import (
-	"github.com/micro/go-micro/v2/logger"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"gopkg.in/natefinch/lumberjack.v2"
+)
+
+var (
+	logger *zap.SugaredLogger
 )
 
 func init() {
 	fileName := "micro.log"
 	syncWriter := zapcore.AddSync(
 		&lumberjack.Logger{
-			fileName:   fileName,
+			Filename:   fileName,
 			MaxSize:    521,
 			MaxBackups: 0,
 			LocalTime:  true,
-			Commpress:  true,
+			Compress:   true,
 		})
 	encoder := zap.NewProductionEncoderConfig()
 	encoder.EncodeTime = zapcore.ISO8601TimeEncoder
@@ -58,11 +61,4 @@ func Error(args ...interface{}) {
 }
 func Errorf(template string, args ...interface{}) {
 	logger.Errorf(template, args...)
-}
-
-func DPainc(args ...interface{}) {
-	logger.DPainc(args...)
-}
-func DPaincf(template string, args ...interface{}) {
-	logger.DPaincf(template, args...)
 }
